@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState, useRef } from "react"; // Agrega useRef
-
+import { api } from "../../Utils/apifetch";
 const UploadForm = ({ onFileUpload }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const UploadForm = ({ onFileUpload }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/upload",
+        "https://backimgorc.onrender.com/api/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

@@ -1,5 +1,6 @@
 // const BASE_URL = "http://localhost:3000/api";
-const BASE_URL = "https://imagenocrback.onrender.com/api";
+const BASE_URL = "https://backimgorc.onrender.com/api";
+
 
 const handleResponse = async (res) => {
   if (!res.ok) {
