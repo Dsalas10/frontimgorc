@@ -49,18 +49,11 @@ const EventComponent = () => {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 1200,
-        mx: "auto",
-        height: "80vh",
-      }}
-    >
+    <Box>
       {/* <Typography variant="h5" gutterBottom align="center">
         Título del Evento
       </Typography> */}
-
-      <Grid container spacing={2} sx={{ height: "100%" }}>
+      <Grid container  sx={{ height: "100%" }}>
         <Grid
           size={{ xs: 12, sm: 6 }}
           sx={{
