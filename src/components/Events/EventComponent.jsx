@@ -6,6 +6,7 @@ import { api } from "../../Utils/apifetch";
 
 const columns = [
   { header: "#", key: "globalIndex" },
+  {header:"Hora",key :"hora"},
   { header: "Archivo", key: "archivo" },
   { header: "Total", key: "total" }, // Nota: Tienes "columna2" dos veces, ¿es intencional? Si no, cámbialo a "columna3"
 ];
@@ -16,10 +17,11 @@ const EventComponent = () => {
   const handleFileUpload = (newResults) => {
     const formattedResults = newResults.map((item) => ({
       globalIndex: item.globalIndex || "-",
+      hora:item.hora || null,
       archivo: item.archivo || "",
       total: item.total || 0,
     }));
-    setData((prev) => [...prev, ...formattedResults]);
+    setData((prev) => [...prev, ...formattedResults].reverse());
   };
 
   const cantidad = data.length;
@@ -31,6 +33,7 @@ const EventComponent = () => {
     const lote = {
       productos: data.map((item) => ({
         numero: item.globalIndex,
+        hora:item.hora,
         archivo: item.archivo,
         total: item.total,
       })),

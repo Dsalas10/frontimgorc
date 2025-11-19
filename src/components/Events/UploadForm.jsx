@@ -52,6 +52,7 @@ const UploadForm = ({ onFileUpload }) => {
           timeout: 60000, // 60 segundos de timeout (ajusta si es necesario)
         }
       );
+      console.log("respone frond",response)
       let currentIndex = globalIndex;
       const newResults = response.data.map((item) => ({
         ...item,
