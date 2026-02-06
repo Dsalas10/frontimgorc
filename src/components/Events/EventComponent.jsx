@@ -6,49 +6,56 @@ import { api } from "../../Utils/apifetch";
 
 const columns = [
   { header: "#", key: "globalIndex" },
-  {header:"Hora",key :"hora"},
-  { header: "Archivo", key: "archivo" },
+  { header: "Hora", key: "hora" },
+  // { header: "Archivo", key: "archivo" },
   { header: "Total", key: "total" }, // Nota: Tienes "columna2" dos veces, ¿es intencional? Si no, cámbialo a "columna3"
 ];
 
 const EventComponent = () => {
   const [data, setData] = useState([]);
-
   const handleFileUpload = (newResults) => {
-    const formattedResults = newResults.map((item) => ({
-      globalIndex: item.globalIndex || "-",
-      hora:item.hora || null,
-      archivo: item.archivo || "",
-      total: item.total || 0,
-    }));
-    setData((prev) => [...prev, ...formattedResults].reverse());
+    const formattedResults = newResults.map((item, index) => {
+      const nextIndex = data.length + index + 1;
+      return {
+        globalIndex: nextIndex,
+        hora: item.hora || null,
+        total: item.total || "0.00",
+      };
+    });
+    // setData((prev) => [...prev, ...formattedResults].reverse());
+    setData((prev) => [...prev, ...formattedResults]);
   };
 
   const cantidad = data.length;
-  const totalGeneral = data.reduce((suma, data) => suma + (data.total || 0), 0);
+  const totalGeneral = data
+    .reduce((sum, item) => {
+      const totalNum = parseFloat(item.total.replace(/[^\d.-]/g, ""));
+      return sum + (isNaN(totalNum) ? 0 : totalNum);
+    }, 0)
+    .toFixed(2);
 
   const handleAddNuevo = async () => {
-    if (data.length === 0) return;
+    setData([]);
+    // if (data.length === 0) return;
 
-    const lote = {
-      productos: data.map((item) => ({
-        numero: item.globalIndex,
-        hora:item.hora,
-        archivo: item.archivo,
-        total: item.total,
-      })),
-      totalProductos: totalGeneral,
-      comandas: cantidad,
-    };
-    try {
-      const response = await api.post("eventos/nuevo", lote);
-      console.log("Lote guardado:", response);
+    // const lote = {
+    //   productos: data.map((item) => ({
+    //     numero: item.globalIndex,
+    //     hora:item.hora,
+    //     total: item.total,
+    //   })),
+    //   totalProductos: totalGeneral,
+    //   comandas: cantidad,
+    // };
+    // try {
+    //   const response = await api.post("eventos/nuevo", lote);
+    //   console.log("Lote guardado:", response);
 
-      // ✅ Limpiar datos y reiniciar tabla
-      setData([]);
-    } catch (err) {
-      console.error("Error guardando lote:", err);
-    }
+    //   // ✅ Limpiar datos y reiniciar tabla
+    //   setData([]);
+    // } catch (err) {
+    //   console.error("Error guardando lote:", err);
+    // }
   };
 
   return (
@@ -56,7 +63,7 @@ const EventComponent = () => {
       {/* <Typography variant="h5" gutterBottom align="center">
         Título del Evento
       </Typography> */}
-      <Grid container  sx={{ height: "100%" }}>
+      <Grid container sx={{ height: "100%" }}>
         <Grid
           size={{ xs: 12, sm: 6 }}
           sx={{
@@ -105,7 +112,7 @@ const EventComponent = () => {
               sx={{ width: "110px", height: "52px" }}
               onClick={handleAddNuevo}
             >
-              Guardar
+              Limpiar
             </Button>
           </Box>
 

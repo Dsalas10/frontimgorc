@@ -16,7 +16,7 @@ const UploadForm = ({ onFileUpload }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [globalIndex, setGlobalIndex] = useState(1);
+  // const [globalIndex, setGlobalIndex] = useState(1);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -45,6 +45,7 @@ const UploadForm = ({ onFileUpload }) => {
     try {
       const response = await axios.post(
         "https://backimgorc.onrender.com/api/upload",
+                // "http://localhost:3000/api/upload",
 
         formData,
         {
@@ -52,16 +53,10 @@ const UploadForm = ({ onFileUpload }) => {
           timeout: 60000, // 60 segundos de timeout (ajusta si es necesario)
         }
       );
-      console.log("respone frond",response)
-      let currentIndex = globalIndex;
-      const newResults = response.data.map((item) => ({
-        ...item,
-        globalIndex: currentIndex++,
-      }));
+      // console.log("respone frond", response);
+    
 
-      if (onFileUpload) onFileUpload(newResults);
-
-      setGlobalIndex(currentIndex);
+      if (onFileUpload) onFileUpload(response.data);
       setFiles([]);
     } catch (err) {
       const errorMessage =
@@ -125,6 +120,7 @@ const UploadForm = ({ onFileUpload }) => {
                 variant="outlined"
                 component="span"
                 fullWidth
+
                 sx={{
                   mb: 2,
                   textTransform: "none",
