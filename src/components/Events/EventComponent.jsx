@@ -14,18 +14,22 @@ const columns = [
 const EventComponent = () => {
   const [data, setData] = useState([]);
   const handleFileUpload = (newResults) => {
-    const formattedResults = newResults.map((item, index) => {
-      const nextIndex = data.length + index + 1;
-      return {
-        globalIndex: nextIndex,
+    setData((prev) => {
+      // 1. Unimos lo viejo con lo nuevo
+      // Como el backend ya manda lo nuevo ordenado, lo ponemos al principio
+      const updatedData = [...newResults, ...prev];
+
+      // 2. Mapeamos para asignar el GlobalIndex basado en la posición
+      return updatedData.map((item, index, array) => ({
+        ...item,
+        // El de arriba (index 0) tiene el número total (ej. 10)
+        // El de abajo (último index) tiene el número 1
+        globalIndex: array.length - index,
         hora: item.hora || null,
         total: item.total || "0.00",
-      };
+      }));
     });
-    // setData((prev) => [...prev, ...formattedResults].reverse());
-    setData((prev) => [...prev, ...formattedResults]);
   };
-
   const cantidad = data.length;
   const totalGeneral = data
     .reduce((sum, item) => {
